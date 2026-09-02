@@ -39,6 +39,18 @@ pkg_check_modules(
 
 configure_file(aquamarine.pc.in aquamarine.pc @ONLY)
 
+# Compiler Cache Forwarding (sccache / ccache)
+find_program(SCCACHE_BIN "sccache")
+find_program(CCACHE_BIN "ccache")
+if(SCCACHE_BIN)
+  set(CMAKE_C_COMPILER_LAUNCHER "${SCCACHE_BIN}")
+  set(CMAKE_CXX_COMPILER_LAUNCHER "${SCCACHE_BIN}")
+  message(STATUS "Aquamarine: sccache compiler launcher active")
+elseif(CCACHE_BIN)
+  set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_BIN}")
+  set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_BIN}")
+  message(STATUS "Aquamarine: ccache compiler launcher active")
+endif()
 set(CMAKE_CXX_STANDARD 23)
 add_compile_options(
   -Wall
